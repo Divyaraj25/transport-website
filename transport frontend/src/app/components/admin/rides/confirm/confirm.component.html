@@ -1,0 +1,301 @@
+<mat-toolbar color="accent" class="sticky-top" style="height: 130px">
+  <section class="m-2 w-100">
+    <div class="d-flex align-items-center my-2">
+      <span>Search by :&nbsp;</span>
+      <form class="w-25 mx-3">
+        <mat-select
+          [ngClass]="{ 'bg-white': !isDark, 'bg-black': isDark }"
+          class="py-2 pe-2 text-center border rounded-3"
+          [(value)]="searchBy"
+        >
+          @for(search of searchOptions;track search._id){
+          <mat-option
+            value="{{ search.value }}"
+            (mousedown)="onSearch(search)"
+            (keyup.enter)="onSearch(search)"
+            >{{ search.search }}</mat-option
+          >
+          }
+        </mat-select>
+      </form>
+      @if(searchBy === 'dateTime'){
+      <input
+        type="text"
+        name=""
+        id="searchInput"
+        class="form-control w-25"
+        placeholder="MM/DD/YYYY"
+        autocomplete="off"
+        disabled
+        (dateInput)="dateChanged($event)"
+        [matDatepicker]="picker"
+        mask="00/00/0000"
+      />
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker touchUi #picker disabled="false"></mat-datepicker>
+      }@else if(searchBy === 'phone_no'){
+      <form>
+        <input
+          type="text"
+          name="contact"
+          mask="000-000-0000"
+          id="searchInput"
+          placeholder="{{ searchValue }}"
+          (keyup.enter)="searchByValue(contact.value)"
+          class="form-control w-100"
+          autocomplete="off"
+          #contact
+        />
+      </form>
+      <button
+        class="mx-2"
+        mat-mini-fab
+        (keyup.enter)="searchByValue(contact.value)"
+        (mousedown)="searchByValue(contact.value)"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+      }@else{
+      <form>
+        <input
+          type="text"
+          name=""
+          id="searchInput"
+          class="form-control"
+          placeholder="{{ searchValue }}"
+          [ngStyle]="{ display: searchBy !== 'none' ? 'block' : 'none' }"
+          (keyup.enter)="searchByValue(text.value)"
+          autocomplete="off"
+          #text
+        />
+      </form>
+      <button
+        class="mx-2 pt-2"
+        mat-mini-fab
+        (keyup.enter)="searchByValue(text.value)"
+        (mousedown)="searchByValue(text.value)"
+        [ngStyle]="{ display: searchBy !== 'none' ? 'block' : 'none' }"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+      }
+    </div>
+    <div class="d-flex align-items-center">
+      <span>Filter by :&nbsp;</span>
+      <form class="w-25 mx-4">
+        <mat-select
+          [ngClass]="{ 'bg-white': !isDark, 'bg-black': isDark }"
+          class="py-2 pe-2 text-center border rounded-3"
+          [(value)]="filterBy"
+        >
+          @for(filter of filterOptions;track filter._id){
+          <mat-option
+            value="{{ filter.value }}"
+            (mousedown)="onFilter(filter)"
+            (keyup.enter)="onFilter(filter)"
+            >{{ filter.sort }}</mat-option
+          >
+          }
+        </mat-select>
+      </form>
+      @if(filterBy === 'status'){
+      <mat-select
+        [ngClass]="{ 'bg-white': !isDark, 'bg-black': isDark }"
+        class="py-2 pe-2 text-center border rounded-3 w-25 text-capitalize"
+        value="none"
+      >
+        <mat-option value="none" hidden>status</mat-option>
+        @for(filter of status;track filter){
+        <mat-option
+          value="{{ filter }}"
+          class="text-capitalize"
+          (mousedown)="filterByValue(filter)"
+          (keyup.enter)="filterByValue(filter)"
+          >{{ filter }}</mat-option
+        >
+        }
+      </mat-select>
+      }@else if(filterBy === 'vehicle_type'){
+      <mat-select
+        [ngClass]="{ 'bg-white': !isDark, 'bg-black': isDark }"
+        class="py-2 pe-2 text-center border rounded-3 w-25 text-capitalize"
+        value="none"
+      >
+        <mat-option value="none" hidden>service type</mat-option>
+        @for(filter of serviceTypes;track filter){
+        <mat-option
+          value="{{ filter }}"
+          class="text-capitalize"
+          (mousedown)="filterByValue(filter)"
+          (keyup.enter)="filterByValue(filter)"
+          >{{ filter }}</mat-option
+        >
+        }
+      </mat-select>
+      }
+    </div>
+  </section>
+</mat-toolbar>
+<section class="m-3">
+  <section style="overflow-x: auto">
+    @for(ride of rides;track ride._id;let i = $index){
+    <mat-card
+      class="mat-elevation-z3 d-flex flex-row card mb-3 border"
+      (mousedown)="detail(ride)"
+      style="cursor: pointer"
+    >
+      <div class="d-flex align-items-center p-2">
+        <mat-card-title
+          [ngStyle]="{ color: isDark ? '#959595' : '#777777' }"
+          class="ms-3"
+          >{{ i + 1 }}</mat-card-title
+        >
+        <div class="vertical-divider mx-3 h-100"></div>
+      </div>
+      <div class="w-100 py-2 d-flex align-items-center">
+        <div style="width: 20%">
+          <mat-card-subtitle class=""
+            >Request Id :
+            <u
+              [ngClass]="{ 'fw-bold': !isDark }"
+              style="word-break: break-all"
+              >{{ ride.requestId }}</u
+            ></mat-card-subtitle
+          >
+          <mat-card-subtitle class=""
+            >uid :
+            <u [ngClass]="{ 'fw-bold': !isDark }">{{
+              ride.userUID
+            }}</u></mat-card-subtitle
+          >
+          <mat-card-subtitle class=""
+            >customer :
+            <u [ngClass]="{ 'fw-bold': !isDark }" class="text-capitalize">{{
+              ride.username
+            }}</u></mat-card-subtitle
+          >
+        </div>
+        <div class="vertical-divider mx-3 h-100"></div>
+        <div
+          style="width: 60%"
+          [ngStyle]="{ color: isDark ? '#959595' : '#777777' }"
+        >
+          <section class="d-flex text-center align-items-center my-2">
+            <img
+              src="assets/markers/source_marker.png"
+              alt="source"
+              height="40"
+            />
+            <div class="fs-5" style="width: 40%">
+              <span class="text-align text-center">
+                {{ ride.source }}
+              </span>
+            </div>
+            <div style="width: 20%">
+              <img src="assets/path.png" alt="path" height="60" />
+            </div>
+            <img
+              src="assets/markers/destination_marker.png"
+              alt="source"
+              height="40"
+            />
+            <div class="fs-5" style="width: 40%">
+              <span class="text-align text-center">
+                {{ ride.destination }}
+              </span>
+            </div>
+          </section>
+          <mat-divider
+            style="background-color: rgb(126, 110, 110)"
+          ></mat-divider>
+          <section class="row p-2">
+            <div class="col-4">
+              <span>{{ ride.dateTime | date : "dd/MM/yyyy, hh:mm a" }}</span
+              >&nbsp;
+              <span>{{ ride.dateTime | dateToTimeString }}</span>
+            </div>
+            <div class="col-4 text-center">
+              {{ ride.vehicle_type | uppercase }}
+            </div>
+            <!--if stops then display number else no stops-->
+            <div class="col-4 text-center">
+              {{ ride.stopNumber ? "stops : " + ride.stopNumber : "no stops" }}
+            </div>
+          </section>
+        </div>
+        <div class="vertical-divider mx-3 h-100"></div>
+        <div style="width: 20%; text-align: center">
+          <!--if the driver is assigned then status is displayed-->
+          @if(ride.assigned){
+          <mat-card
+            class="m-2 p-2"
+            matTooltip="Status of driver"
+            matTooltipPosition="before"
+            matTooltipShowDelay="500"
+          >
+            <mat-card-title
+              class="rounded text-capitalize"
+              [ngClass]="{
+                'bg-dark-subtle':
+                  ride.status === 'pending' || ride.status === 'hold',
+                'bg-info': ride.status === 'accepted',
+                'bg-success':
+                  ride.status === 'arrived' || ride.status === 'completed',
+                'bg-warning': ride.status === 'picked',
+                'bg-primary': ride.status === 'started'
+              }"
+              >{{ ride.status }}</mat-card-title
+            >
+          </mat-card>
+          }
+          <!--if the driver is not assigned then button is clickable else not-->
+          @if(ride.assigned){
+          <mat-card
+            class="m-2 p-2"
+            matTooltip="Assigned Driver name"
+            matTooltipPosition="before"
+            matTooltipShowDelay="500"
+          >
+            <mat-card-title class="rounded bg-success text-capitalize">{{
+              ride.driverUsername || ride.driver.length > 0
+                ? ride.driver[0].username!
+                : null || ride.hold!
+            }}</mat-card-title>
+          </mat-card>
+          }@else{
+          <button
+            class="w-75 my-1"
+            mat-raised-button
+            color="primary"
+            style="cursor: auto"
+            (mousedown)="detail(ride); $event.stopPropagation()"
+            (keyup.enter)="detail(ride)"
+          >
+            {{ ride.button }}
+          </button>
+          <!--if the driver is assigned then cancel button disappears-->
+          <button
+            class="w-75 my-1"
+            style="cursor: auto"
+            mat-raised-button
+            color="warn"
+            (mousedown)="
+              deleteRide(ride._id, ride.requestId); $event.stopPropagation()
+            "
+          >
+            Cancel
+          </button>
+          }
+        </div>
+      </div>
+    </mat-card>
+    }@empty{
+    <div class="text-center fs-4 pt-3" style="height: 100px">
+      {{ noData }}
+    </div>
+    }
+  </section>
+</section>

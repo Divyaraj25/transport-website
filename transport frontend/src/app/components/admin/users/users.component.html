@@ -1,0 +1,296 @@
+<mat-drawer-container autosize class="h-100">
+  <mat-toolbar color="accent" class="sticky-top" style="height: 120px">
+    <section class="m-2 w-100">
+      <section class="d-flex align-items-center my-2">
+        <span>Search by :&nbsp;</span>
+        <form class="d-flex align-items-center" [formGroup]="searchForm">
+          <div class="row">
+            <div
+              class="col-3"
+              matTooltip="This is your uid"
+              matTooltipShowDelay="700"
+            >
+              <input
+                type="text"
+                name="uid"
+                id="uid"
+                class="form-control"
+                placeholder="uid"
+                formControlName="uid"
+                (keyup.enter)="onSearch()"
+                autocomplete="off"
+              />
+            </div>
+            <div
+              class="col-3"
+              matTooltip="This is your name"
+              matTooltipShowDelay="700"
+            >
+              <input
+                autocomplete="off"
+                type="text"
+                name="username"
+                id="username"
+                class="form-control"
+                placeholder="username"
+                formControlName="username"
+                (keyup.enter)="onSearch()"
+              />
+            </div>
+            <div
+              class="col-3"
+              matTooltip="This is your email"
+              matTooltipShowDelay="700"
+            >
+              <input
+                autocomplete="off"
+                type="text"
+                name="email"
+                id="email"
+                class="form-control"
+                placeholder="email"
+                formControlName="email"
+                (keyup.enter)="onSearch()"
+              />
+            </div>
+            <div
+              class="col-3"
+              matTooltip="This is your contact"
+              matTooltipShowDelay="700"
+            >
+              <input
+                autocomplete="off"
+                type="text"
+                name="phone_no"
+                id="contact"
+                class="form-control"
+                placeholder="contact"
+                formControlName="phone_no"
+                (keyup.enter)="onSearch()"
+                mask="0000000000"
+              />
+            </div>
+          </div>
+          <button
+            class="ms-1"
+            type="submit"
+            mat-icon-button
+            (mousedown)="onSearch()"
+          >
+            <mat-icon>search</mat-icon>
+          </button>
+        </form>
+      </section>
+      <section class="my-2">
+        <form class="d-flex align-items-center">
+          <span>Sort by :&nbsp;</span>
+          <mat-select
+          [ngClass]="{'bg-white': !isDark, 'bg-black': isDark}"
+            class="py-2 pe-2 text-center border rounded-3 w-25"
+            aria-label="Default select example"
+            [(value)]="selectedSort"
+          >
+            @for(sort of sortByOptions;track sort._id){
+            <mat-option value="{{ sort.value }}" (mousedown)="onSort(sort)">
+              {{ sort.sort }}
+            </mat-option>
+            }
+          </mat-select>
+        </form>
+      </section>
+    </section>
+    <button
+      mat-icon-button
+      style="margin-left: auto"
+      matTooltip="Add user"
+      (mousedown)="add.toggle(); addUserButton()"
+      class="bg-primary"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <mat-drawer
+    #add
+    mode="over"
+    position="end"
+    [disableClose]="true"
+    style="width: 400px"
+  >
+    <section class="p-3 m-1 border border-3 rounded-3 mat-elevation-z2">
+      <section class="d-flex align-items-center justify-content-between">
+        <div class="fs-2">Add User</div>
+        <button mat-icon-button (mousedown)="drawerClose()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </section>
+      <mat-divider></mat-divider>
+      <section class="mt-2 p-2 border rounded-3 text-center">
+        <form [formGroup]="userForm">
+          <mat-form-field class="w-100">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" />
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Select Country</mat-label>
+            <mat-select formControlName="country">
+              @for(country of countries;track country._id){
+              <mat-option
+                value="{{ country.name }}"
+                (mousedown)="onChangeCountry(country)"
+                >{{ country.name }}</mat-option
+              >
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="w-100">
+            <mat-label>Contact</mat-label>
+            <div class="d-flex">
+              @if(isccinput || userForm.get('phone_no')?.value){
+              <mat-prefix>{{ userForm.get("prefix")?.value }}&nbsp;</mat-prefix>
+              }
+              <input
+                matInput
+                (focus)="isccinput = true"
+                (blur)="isccinput = false"
+                mask="000-000-0000"
+                formControlName="phone_no"
+              />
+            </div>
+          </mat-form-field>
+
+          <label
+            for="image"
+            id="drop-area"
+            matTooltip="Click to Upload image"
+            matTooltipPositionAtOrigin="true"
+            matTooltipShowDelay="700"
+            class="mat-elevation-z5 w-100"
+          >
+            <input
+              type="file"
+              name="vehicle_image"
+              id="image"
+              class="form-control"
+              accept="image/*"
+              hidden
+              (change)="onImageChange($event)"
+              formControlName="profile"
+            />
+            <div id="img-view" class="text-black">
+              <img
+                src="{{ previewImage }}"
+                id="image-preview"
+                alt=""
+                height="200px"
+                width="200px"
+                class="img-fluid rounded"
+              />
+              @if(previewImage === 'assets/dummy_user.jpg'){
+              <p>Drag and Drop or click here <br />to upload image</p>
+              <span>Upload any image from desktop</span>
+              }
+            </div>
+          </label>
+          <p class="mt-2" *ngIf="imageName">
+            <u>Selected image</u> : {{ imageName }}
+          </p>
+          @if(userForm.get('profile')?.hasError('required') &&
+          userForm.get('profile')?.touched){
+          <div class="text-danger">Profile photo is required*</div>
+          }
+          <button
+            type="submit"
+            class="bg-success fs-3 mt-2 p-2 border border rounded-3 w-100"
+            (mousedown)="onSubmit()"
+          >
+            {{ editMode ? "Update" : "Submit" }}
+          </button>
+        </form>
+      </section>
+    </section>
+  </mat-drawer>
+  @if(userData.length > 0){
+  <section class="m-3 p-1 row gx-2 justify-content-start">
+    @for(user of userData;track user._id){
+
+    <mat-card class="p-2 col-3 m-2 card" style="width: 250px">
+      <img
+        mat-card-image
+        src="http://localhost:5000/images/users/{{ user.profile }}"
+        alt="{{ user.username }}"
+        height="220"
+      />
+      <mat-card-content>
+        <mat-card-title
+          class="text-truncate"
+          matTooltipShowDelay="500"
+          matTooltip="{{ user.username }}"
+          >{{ user.username }}</mat-card-title
+        >
+        <mat-card-subtitle>uid : {{ user.uid }}</mat-card-subtitle>
+        <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
+        <mat-card-subtitle
+          >{{ user.prefix }} {{ user.phone_no }}</mat-card-subtitle
+        >
+        <mat-card-subtitle>{{ user.country }}</mat-card-subtitle>
+      </mat-card-content>
+      <mat-card-actions>
+        <button
+          mat-icon-button
+          matTooltip="Edit {{ user.username }}"
+          matTooltipShowDelay="700"
+          (mousedown)="editUser(user)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          class="text-danger"
+          matTooltip="Delete {{ user.username }}"
+          matTooltipShowDelay="700"
+          (mousedown)="deleteUser(user)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          class="text-primary"
+          matTooltip="Add Card"
+          matTooltipShowDelay="700"
+          (mousedown)="addCard(user)"
+        >
+          <mat-icon>credit_card</mat-icon>
+        </button>
+      </mat-card-actions>
+      <mat-card-footer class="text-end"
+        ><span class="fw-bold"
+          ><u>{{ user.uid }}</u></span
+        ></mat-card-footer
+      >
+    </mat-card>
+    }
+  </section>
+  @if(totalCount > pageSize){
+  <mat-paginator
+    #paginator
+    aria-label="Select page"
+    class="mat-elevation-z2 mb-3 fs-5"
+    [length]="totalCount"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[5, 10]"
+    (page)="handlePageEvent($event)"
+    [pageIndex]="page - 1"
+  ></mat-paginator>
+  } }@else{
+  <div class="row">
+    <div class="col-md-12 fs-3 text-center border rounded-3 m-3 p-3">
+      No Users data found
+    </div>
+  </div>
+  }
+</mat-drawer-container>

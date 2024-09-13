@@ -1,0 +1,87 @@
+.card{
+  scale: 1;
+  transition: all 0.3s ease-in-out;
+}
+
+.custom-border{
+  border-color: rgb(49, 126, 255) !important;
+}
+
+.card:hover{
+  scale: 1.1;
+}
+
+.overflow-x-scroll{
+  overflow-x: hidden !important;
+  overflow-y: scroll ;
+}
+
+.height_for_card{
+  height: calc(100dvh - 165px );
+}
+
+.mat-datepicker-content-container{
+  background-color: darkblue;
+}
+
+.mat-calender{
+  background-color: darkblue;
+}
+
+.ngx-mat-datetime-picker{
+  background-color: darkblue;
+}
+
+.ngx-mat-timepicker{
+  background-color: darkblue;
+}
+
+.ngx-mat-form-field{
+  background-color: darkblue;
+}
+
+.custom-bg{
+  background-color: rgb(49, 126, 255) !important;
+}
+
+.mat-datepicker-dialog{
+  background-color: rgb(49, 126, 255) !important;
+}
+
+#cdk-overlay-0{
+  background-color: rgb(49, 126, 255) !important;
+}
+
+.card-brand {
+  background: linear-gradient(135deg, #dc8d32, #b5c521) padding-box;
+  padding: 10px;
+}
+
+.loader {
+  border: 3px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 3px solid #3498db;
+  width: 30px;
+  height: 30px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

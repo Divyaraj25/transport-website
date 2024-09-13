@@ -1,0 +1,6 @@
+projectKey=angular-transport-backend
+serverUrl=http://localhost:9000
+serverVersion=10.5.1.90531
+dashboardUrl=http://localhost:9000/dashboard?id=angular-transport-backend
+ceTaskId=20dbfbe8-1c9f-4bb2-8453-2885c824aa92
+ceTaskUrl=http://localhost:9000/api/ce/task?id=20dbfbe8-1c9f-4bb2-8453-2885c824aa92

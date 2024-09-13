@@ -1,0 +1,81 @@
+<section class="m-4">
+  <mat-divider></mat-divider>
+  <div class="row py-2">
+    <div class="col-5">
+      <mat-form-field class="w-100">
+        <mat-label>Select Country</mat-label>
+        <mat-select
+          [(value)]="selectedFirst"
+          [disabled]="editMode"
+        >
+          @if(countries.length > 0){ @for(country of countries;track
+          country._id){
+          <mat-option value="{{ country.name }}" (mousedown)="onSelectCountry(country)">{{ country.name }}</mat-option>
+          } }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-4">
+      <mat-form-field class="w-100">
+        <mat-label>Enter a city</mat-label>
+        <input
+          matInput
+          id="city"
+          [attr.autocomplete]="'off'"
+          [(ngModel)]="cityInput"
+          [disabled]="editMode"
+        />
+      </mat-form-field>
+    </div>
+    <div class="col-1 align-self-center mx-3">
+      <button
+        mat-raised-button
+        class="border rounded-5 w-100"
+        color="primary"
+        (mousedown)="onSubmit()"
+      >
+        {{ editMode ? "Update" : "Add" }}
+      </button>
+    </div>
+    @if(editMode){
+    <div class="col-1 align-self-center mx-3">
+      <button mat-raised-button class="border rounded-5 w-100" color="primary" (mousedown)="clearUpdate()">
+        Clear
+      </button>
+    </div>
+    }
+  </div>
+  <mat-divider></mat-divider>
+  <div class="row mt-3 customH">
+    <div class="col-md-9 border customBg text-center" id="map"></div>
+    <div class="col-md-3 border">
+      <div class="row">
+        <div class="col-12">
+          <div
+            class="row align-items-center justify-content-center my-3 fs-5 fw-medium text-center"
+          >
+            Registered Cities
+          </div>
+          <mat-divider></mat-divider>
+          <section style="max-height: 500px; overflow-y:auto; overflow-x:hidden;">
+          @for(city of cities;track city._id){
+          <div
+            style="cursor: pointer"
+            class="row align-items-center justify-content-center my-3 fs-6 border mx-1 p-2 text-break"
+            (mousedown)="onSelectCity(city.cca2, city.city)"
+          >
+            {{ city.city }}
+          </div>
+          }@empty{
+            <div
+            class="row align-items-center justify-content-center my-3 fs-6 mx-1 p-2 text-break"
+          >
+          No cities added in this country
+          </div>
+          }
+        </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

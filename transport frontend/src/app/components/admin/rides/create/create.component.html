@@ -1,0 +1,434 @@
+<section class="m-3">
+  <div class="row">
+    <div class="col-12">
+      <div class="fs-3 my-3">Create Ride</div>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 border-end">
+      <section class="my-2">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="fs-5 my-2">Search User by contact number</div>
+            <form class="d-flex" [formGroup]="searchByContact">
+              <mat-form-field class="w-100">
+                <mat-label>Contact no.</mat-label>
+                <input
+                  matInput
+                  mask="000-000-0000"
+                  formControlName="phone_no"
+                  (keyup.enter)="searchUserByContact()"
+                />
+              </mat-form-field>
+              <button
+                mat-fab
+                class="ms-2 rounded"
+                type="submit"
+                (mousedown)="searchUserByContact()"
+              >
+                <mat-icon>search</mat-icon>
+              </button>
+            </form>
+
+            @if(calculatedForMap){
+
+            <mat-divider class="my-3"></mat-divider>
+            <div
+              [ngClass]="{
+                'border border-5 border-danger': paymentSelectedError
+              }"
+            >
+              <mat-label class="m-2 fw-bolder">Payment method : </mat-label>
+              <mat-radio-group
+                [(ngModel)]="paymentMethod"
+                (change)="setPaymentMethod()"
+              >
+                <mat-radio-button value="card">Card</mat-radio-button>
+                <mat-radio-button value="cash">Cash</mat-radio-button>
+              </mat-radio-group>
+              <mat-error *ngIf="paymentSelectedError"
+                >Please select payment method</mat-error
+              >
+            </div>
+            <mat-divider></mat-divider>
+            @if(paymentMethod === "card"){ @if(cards.length > 0){
+            <div class="my-3 ms-4">
+              <mat-radio-group [(ngModel)]="selectedCard">
+                @for(card of cards;track card.id){ @defer(){
+                <div class="mb-2">
+                  <mat-radio-button value="{{ card.id }}">
+                    <mat-card
+                      class="d-inline-block me-2 text-center p-1 card-brand"
+                      ><mat-card-title
+                        >{{ card.brand }}&nbsp;</mat-card-title
+                      ></mat-card
+                    >
+                    <span class="fs-5 lh-lg">**** **** {{ card.last4 }}</span>
+                  </mat-radio-button>
+                </div>
+                }@loading(minimum 1s){
+                <div class="loader text-center"></div>
+                } }
+              </mat-radio-group>
+            </div>
+            }@else{
+            <div class="row m-2">
+              <div class="col-7 fs-5 fw-bolder text-body-primary">
+                You have no cards
+              </div>
+              <div class="col-5">
+                <button
+                  mat-flat-button
+                  color="primary"
+                  (mousedown)="addCard()"
+                  (keyup.enter)="addCard()"
+                >
+                  Add Card
+                </button>
+              </div>
+            </div>
+            } } }
+          </div>
+          @if(userFound){
+          <div class="col-md-6">
+            <mat-card class="m-1 p-2" style="max-width: 250px">
+              <img [src]="previewImage" alt="dummy user" height="220" />
+              <mat-card-content>
+                <mat-card-title
+                  class="text-truncate"
+                  matTooltipShowDelay="500"
+                  matTooltip="username"
+                  >{{ user?.username || "Username" }}</mat-card-title
+                >
+                <mat-card-subtitle class="text-truncate"
+                  >uid : {{ user?.uid || "uid" }}
+                </mat-card-subtitle>
+                <mat-card-subtitle class="text-truncate">{{
+                  user?.email || "email"
+                }}</mat-card-subtitle>
+                <mat-card-subtitle class="text-truncate">{{
+                  user?.phone_no
+                    ? user?.prefix + " " + user?.phone_no
+                    : "contact no."
+                }}</mat-card-subtitle>
+                <mat-card-subtitle class="text-truncate">{{
+                  user?.country || "country name"
+                }}</mat-card-subtitle>
+              </mat-card-content>
+            </mat-card>
+            <!-- add a user card -->
+          </div>
+          }
+        </div>
+        @if(calculatedForMap){
+        <mat-divider></mat-divider>
+        @if(rideSchedule){
+        <div class="row align-items-center">
+          <div class="col-6">
+            <div class="fs-5 mb-2 ms-2">Date :</div>
+            <mat-form-field class="w-100 mt-1">
+              <input
+                matInput
+                name="date"
+                id="date"
+                [matDatepicker]="picker"
+                [matDatepickerFilter]="myFilter"
+                [(ngModel)]="dataPicked"
+                (change)="datetimeChanged = true"
+                disabled
+                placeholder="MM/DD/YYYY"
+              />
+              <mat-datepicker-toggle
+                matIconSuffix
+                [for]="picker"
+                (mousedown)="datetimeChanged = true"
+                (change)="datetimeChanged = true"
+              ></mat-datepicker-toggle>
+              <mat-datepicker touchUi #picker disabled="false"></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-4">
+            <div class="fs-5 m-2">Time :</div>
+            <div class="my-2">
+              <ngb-timepicker
+                [(ngModel)]="time"
+                [meridian]="false"
+                [spinners]="false"
+                (mousedown)="timeChanged(); datetimeChanged = true"
+                (keyup.enter)="timeChanged(); datetimeChanged = true"
+                (change)="timeChanged(); datetimeChanged = true"
+              />
+            </div>
+          </div>
+          <div class="col-2">
+            <button
+              mat-raised-button
+              color="warn"
+              (dblclick)="timeChanged(); datetimeChanged = false"
+              (keyup.enter)="timeChanged(); datetimeChanged = false"
+              [disabled]="!datetimeChanged"
+            >
+              OK
+            </button>
+          </div>
+        </div>
+        <div
+          class="text-warning border border-2 rounded p-2 m-2 fw-bolder fs-5"
+        >
+          Info : You have to double click the OK button seen above, to proceed!
+        </div>
+        }
+
+        <div class="row">
+          @if(!datetimeChanged){
+          <div class="col-6">
+            <button
+              mat-raised-button
+              class="w-100 bg-success"
+              [disabled]="!this.calculated"
+              (mousedown)="bookRideSubmit()"
+            >
+              {{ rideSchedule ? "Book Ride" : "Ride Now" }}
+            </button>
+          </div>
+          }
+          <div class="col-6">
+            <button
+              mat-raised-button
+              color="accent"
+              class="w-100"
+              (mousedown)="scheduleRide()"
+              (keyup.enter)="scheduleRide()"
+            >
+              {{ rideSchedule ? "Cancel" : "Schedule Ride" }}
+            </button>
+          </div>
+        </div>
+        }
+      </section>
+      <mat-divider></mat-divider>
+
+      @if(calculatedForMap){
+
+      <div
+        class="row"
+        [ngClass]="{
+          'border border-5 border-danger': serviceTypeSelectedError
+        }"
+      >
+        <div class="col-12">
+          <div class="fs-5 my-2">Service Types :</div>
+          <mat-error *ngIf="serviceTypeSelectedError"
+            >Please select service type</mat-error
+          >
+          <section>
+            <section class="row m-1 radio-tile-group">
+              @for(vehicle of vehicles;track vehicle._id){
+              <div class="col-3 m-2 radio-tile align-items-center">
+                <label for="service" style="cursor: pointer">
+                  <mat-card
+                    class="text-center card"
+                    [ngClass]="
+                      vehicle._id! == selected_type._id!
+                        ? isDark
+                          ? 'border border-top-0 border-start-0 border-end-0 border-3 border-success-subtle'
+                          : 'border border-top-0 border-start-0 border-end-0 border-3 border-success  '
+                        : ''
+                    "
+                    (mousedown)="select_type(vehicle)"
+                  >
+                    @if(vehicle.vehicle_image){
+                    <img
+                      src="http://localhost:5000/images/vehicles/{{
+                        vehicle.vehicle_image
+                      }}"
+                      alt="{{ vehicle.vehicle_type }}"
+                      class="img-fluid"
+                    />
+                    }@else{
+                    <img
+                      src="assets/cars/dummy_car.png"
+                      alt="vehicle_type"
+                      class="img-fluid bg-light-subtle"
+                    />
+                    }
+                    <div
+                      class="pb-2"
+                      [ngClass]="{
+                        'bg-success-subtle bg-opacity-50':
+                          vehicle._id! === selected_type._id! && !isDark,
+                        'bg-success bg-opacity-50':
+                          isDark && vehicle._id! === selected_type._id!
+                      }"
+                    >
+                      <mat-card-title class="fs-6">{{
+                        vehicle.vehicle_type
+                      }}</mat-card-title>
+                      <mat-card-subtitle
+                        >{{ currency_symbol }}
+                        {{ vehicle.totalPrize.toFixed(2) }}</mat-card-subtitle
+                      >
+                      @if(vehicle._id! === selected_type._id!){
+                      @if(vehicle.minFare === vehicle.totalPrize){
+                      <mat-card-subtitle style="font-size: 10px"
+                        >Min Fare :{{ currency_symbol }}
+                        {{ vehicle.minFare.toFixed(2) }}</mat-card-subtitle
+                      >
+                      }@else{
+                      <mat-card-subtitle style="font-size: 10px"
+                        >Base Prize :{{ currency_symbol }}
+                        {{ vehicle.basePrize.toFixed(2) }}</mat-card-subtitle
+                      >
+                      <mat-card-subtitle style="font-size: 10px"
+                        >Prize per Distance(KM) :{{ currency_symbol }}
+                        {{
+                          vehicle.prizePerDistance.toFixed(2)
+                        }}</mat-card-subtitle
+                      >
+                      <mat-card-subtitle style="font-size: 10px"
+                        >Prize per Time(minute) :{{ currency_symbol }}
+                        {{ vehicle.prizePerTime.toFixed(2) }}</mat-card-subtitle
+                      >
+                      } }
+                    </div>
+                  </mat-card>
+                </label>
+              </div>
+
+              }@empty{
+              <div class="col-12 m-2 fs-4 fw-bold">
+                No vehicle pricing data found in this city
+              </div>
+              }
+            </section>
+          </section>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+
+      }
+    </div>
+    <div class="col-md-6 sticky">
+      @if(firstTimeLoad){
+      <div class="row" [ngStyle]="{ display: userFound ? 'block' : 'none' }">
+        <div class="col-12">
+          <section class="p-1 m-2">
+            <form [formGroup]="googleLocations">
+              <label class="fs-5 my-2" for="source">
+                <img
+                  src="assets/markers/source_marker.png"
+                  alt="source marker"
+                  height="40"
+                />
+                Source :
+              </label>
+              <mat-form-field class="w-100">
+                <mat-label>Source</mat-label>
+                <input matInput formControlName="from" id="source" />
+              </mat-form-field>
+
+              @if(getArrayLength() >= 1){
+              <mat-divider></mat-divider>
+              <div class="fs-5 my-2">
+                <img
+                  src="assets/markers/stop_marker.png"
+                  alt="stop marker"
+                  height="30"
+                />
+                Stops :
+              </div>
+              <div formArrayName="stops">
+                <ng-container
+                  *ngFor="let stop of getStopsArray().controls; let i = index"
+                >
+                  <div class="d-flex flex-row">
+                    <mat-form-field class="w-100">
+                      <mat-label>Add stop </mat-label>
+                      <input
+                        matInput
+                        [formControlName]="i"
+                        id="stops-{{ i }}"
+                      />
+                    </mat-form-field>
+                    <button
+                      mat-mini-fab
+                      color="warn"
+                      class="mt-2"
+                      (mousedown)="removeStopFromFormArray(i)"
+                      matTooltip="Remove Stop"
+                      matTooltipShowDelay="500"
+                      matTooltipPosition="above"
+                    >
+                      <mat-icon>remove</mat-icon>
+                    </button>
+                  </div>
+                </ng-container>
+              </div>
+              <mat-divider></mat-divider>
+              }
+
+              <label class="fs-5 my-2" for="Source">
+                <img
+                  src="assets/markers/destination_marker.png"
+                  alt="destination marker"
+                  height="40"
+                />
+                Destination :
+              </label>
+              <mat-form-field class="w-100">
+                <mat-label>Destination</mat-label>
+                <input matInput formControlName="to" id="destination" />
+              </mat-form-field>
+              <div
+                class="d-flex align-items-center"
+                [ngClass]="
+                  getArrayLength() < stops
+                    ? 'justify-content-between'
+                    : 'justify-content-end'
+                "
+              >
+                @if(getArrayLength() < stops && calculatedForMap &&
+                googleLocations.get('stops').valid){
+                <span
+                  [ngStyle]="{
+                    color: isDark ? 'rgb(93, 93, 225)' : 'rgb(0,27,255)'
+                  }"
+                  style="cursor: pointer"
+                  (mousedown)="addStop()"
+                  >Add Another Stop</span
+                >
+                }
+                <button
+                  mat-raised-button
+                  type="submit"
+                  (mousedown)="calculate()"
+                  [disabled]="googleLocations.invalid"
+                >
+                  Estimate
+                </button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+      } @if(calculatedForMap){
+      <div class="row p-2">
+        <div id="map" style="height: 500px"></div>
+      </div>
+      <div class="row border rounded-3 p-2">
+        <div class="col-12 d-flex flex-row">
+          <mat-card class="w-100 p-2 m-2 text-center mat-elevation-z2">
+            <mat-card-title>{{ timeDisplay }}</mat-card-title>
+            <mat-card-subtitle>Time</mat-card-subtitle>
+          </mat-card>
+          <mat-card class="w-100 p-2 m-2 text-center mat-elevation-z2">
+            <mat-card-title>{{ distanceDisplay }}</mat-card-title>
+            <mat-card-subtitle>Distance</mat-card-subtitle>
+          </mat-card>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</section>

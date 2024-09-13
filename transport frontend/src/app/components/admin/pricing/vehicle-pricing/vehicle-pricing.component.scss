@@ -1,0 +1,27 @@
+:host * {
+  --transition-speed: 500ms;
+  transition: all var(--transition-speed) ease-in-out !important;
+}
+
+.style_1 {
+  // pointer-events: none;
+    --transition-speed : 300ms;
+    // transition: scale 10ms ease-in-out,
+    //             margin 50ms ease-in-out;
+    margin-top: -100px;
+    margin-right: calc(-40vw);
+    opacity: 0;
+    scale: 0;
+}
+
+
+.after_if_style_1{
+  // pointer-events: all;
+    margin-right: 0px;
+    --transition-speed : 500ms;
+    top : 0px;
+    margin-top: 0px;
+    opacity: 1;
+    scale: 1;
+
+}

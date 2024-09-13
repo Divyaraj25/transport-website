@@ -1,0 +1,39 @@
+.mat-dialog-container {
+  background-color: aqua;
+}
+
+.default-card {
+  background-color: #7a7a7a;
+}
+.card-brand {
+  background: linear-gradient(135deg, #3238dc, #21a9c5) padding-box;
+  padding: 10px;
+}
+.loader {
+  border: 3px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 3px solid #3498db;
+  width: 30px;
+  height: 30px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

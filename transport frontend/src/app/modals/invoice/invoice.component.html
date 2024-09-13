@@ -1,0 +1,127 @@
+<section class="background">
+  <div class="d-flex align-items-end justify-content-center">
+    <h1 mat-dialog-title class="m-0 p-0 ps-2">
+      {{ data.title }}
+    </h1>
+    <mat-icon class="ms-2 mb-1">receipt_long</mat-icon>
+  </div>
+  <div mat-dialog-title class="d-flex justify-content-center">
+    requestId :&nbsp;<span
+      style="color: rgb(104, 94, 94); text-decoration: underline"
+      >{{ data.content.requestId }}</span
+    >
+  </div>
+
+  <mat-divider></mat-divider>
+  <mat-dialog-content class="mt-3 ms-2">
+    <div class="d-flex justify-content-between mx-5">
+      <span>pickup location</span>
+      <span>dropoff location</span>
+    </div>
+    <section class="d-flex text-center align-items-center my-2">
+      <img src="assets/markers/source_marker.png" alt="source" height="40" />
+      <div class="fs-5" style="width: 40%">
+        <span class="text-align text-center">
+          {{ data.content.source }}
+        </span>
+      </div>
+      <div style="width: 20%">
+        <img src="assets/path.png" alt="path" height="60" />
+      </div>
+      <img
+        src="assets/markers/destination_marker.png"
+        alt="source"
+        height="40"
+      />
+      <div class="fs-5" style="width: 40%">
+        <span class="text-align text-center">
+          {{ data.content.destination }}
+        </span>
+      </div>
+    </section>
+    <mat-divider></mat-divider>
+    <div class="d-flex justify-content-between mx-4 p-2">
+      <span>Total distance :</span>
+      <span>{{ data.content.distance }}</span>
+    </div>
+    <mat-divider></mat-divider>
+    <section class="m-2 ms-4" style="width: 62%">
+      @if(data.content.min_fare !== data.content.total_fare){
+
+      <div class="d-flex justify-content-between">
+        <span class="d-flex flex-column">
+          <span>Time Prize :</span>
+          <span style="font-size: 12px"
+            >({{ currency }}{{ data.content.time_prize }}/min)</span
+          >
+        </span>
+        <span class="d-flex flex-column">
+          <span>{{ currency }}{{ data.content.prize_per_time }}</span>
+          <span style="font-size: 12px; text-align: end"
+            >{{ currency }}{{ data.content.prize_per_time }}</span
+          >
+        </span>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="d-flex justify-content-between">
+        <span class="d-flex flex-column">
+          <span>Distance base Prize :</span>
+          <span style="font-size: 12px"
+            >(0km - {{ data.content.distance_base_prize }}km)</span
+          >
+        </span>
+        <span class="d-flex flex-column">
+          <span>{{ currency }}{{ data.content.base_prize }}</span>
+          <span style="font-size: 12px; text-align: end"
+            >{{ currency }}{{ data.content.base_prize }}</span
+          >
+        </span>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="d-flex justify-content-between">
+        <span class="d-flex flex-column">
+          <span>Distance Prize :</span>
+          <span style="font-size: 12px"
+            >({{ currency }}{{ data.content.distance_prize }}/km)</span
+          >
+        </span>
+        <span class="d-flex flex-column">
+          <span>{{ currency }}{{ data.content.prize_per_distance }}</span>
+          <span style="font-size: 12px; text-align: end"
+            >{{ currency }}{{ data.content.prize_per_distance }}</span
+          >
+        </span>
+      </div>
+      <mat-divider class="bg-black my-2"></mat-divider>
+      }@else{
+      <div class="d-flex justify-content-between">
+        <span> Minimum fare :</span>
+        <span>{{ currency }}{{ data.content.min_fare }}</span>
+      </div>
+      <mat-divider class="bg-black my-2"></mat-divider>
+      }
+      <div class="d-flex justify-content-between">
+        <span> Total fare :</span>
+        <span>{{ currency }}{{ data.content.total_fare }}</span>
+      </div>
+    </section>
+    <mat-divider></mat-divider>
+    <div class="ms-5 mt-3 d-flex justify-content-center">
+      <span>
+        <b>Rating :&nbsp;</b>
+      </span>
+      <ngb-rating [(rate)]="rating" />
+    </div>
+  </mat-dialog-content>
+  <mat-divider></mat-divider>
+  <div>
+    <mat-dialog-actions class="d-flex justify-content-center">
+      <button
+        mat-raised-button
+        [mat-dialog-close]="{ rating: rating, rideId: data.content.rideId }"
+      >
+        {{ data.action }}
+      </button>
+    </mat-dialog-actions>
+  </div>
+</section>

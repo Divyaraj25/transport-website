@@ -1,0 +1,6 @@
+projectKey=angular-transport-frontend
+serverUrl=http://localhost:9000
+serverVersion=10.5.1.90531
+dashboardUrl=http://localhost:9000/dashboard?id=angular-transport-frontend
+ceTaskId=331f53f9-d598-4a85-9961-c36cc8cf144c
+ceTaskUrl=http://localhost:9000/api/ce/task?id=331f53f9-d598-4a85-9961-c36cc8cf144c

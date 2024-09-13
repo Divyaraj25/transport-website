@@ -1,0 +1,248 @@
+<mat-toolbar color="accent" class="sticky-top" style="height: 140px">
+  <section class="m-2 w-100">
+    <div class="d-flex align-items-center my-2">
+      <span>Search by :&nbsp;</span>
+      <form class="w-25 mx-3">
+        <mat-select
+          [ngClass]="{ 'bg-white': !isDark, 'bg-black': isDark }"
+          class="py-2 pe-2 text-center border rounded-3 text-capitalize"
+          [(value)]="searchBy"
+        >
+          @for(search of searchOptions;track search._id){
+          <mat-option
+            value="{{ search.search }}"
+            class="text-capitalize"
+            (mousedown)="onSearch(search)"
+            (keyup.enter)="onSearch(search)"
+            >{{ search.value }}</mat-option
+          >
+          }
+        </mat-select>
+      </form>
+      @if(searchBy !== 'none'){
+
+      <input
+        type="text"
+        name="location"
+        id="searchInput"
+        placeholder="{{ searchValue }}"
+        (keyup.enter)="searchByValue(location.value)"
+        class="form-control w-50"
+        autocomplete="off"
+        #location
+      />
+
+      }
+    </div>
+    <div class="d-flex align-items-center">
+      <span>Filter by :&nbsp;</span>
+      <form class="w-25 mx-3">
+        <mat-select
+          [ngClass]="{ 'bg-white': !isDark, 'bg-black': isDark }"
+          class="py-2 pe-2 text-center border rounded-3 text-capitalize"
+          [(value)]="filterBy"
+        >
+          @for(search of filterOptions;track search._id){
+          <mat-option
+            value="{{ search.value }}"
+            class="text-capitalize"
+            (mousedown)="onFilter(search)"
+            (keyup.enter)="onFilter(search)"
+            >{{ search.filter }}</mat-option
+          >
+          }
+        </mat-select>
+      </form>
+      @if(filterValue === "dateTime"){
+      <mat-form-field>
+        <mat-label>Enter a Date Range</mat-label>
+        <mat-date-range-input
+          [rangePicker]="picker"
+          [dateFilter]="myFilter"
+          disabled
+        >
+          <input matStartDate placeholder="Start date" [(ngModel)]="fromDate" />
+          <input matEndDate placeholder="End date" [(ngModel)]="toDate" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-date-range-picker #picker touchUi disabled="false">
+          <mat-date-range-picker-actions>
+            <button mat-button matDateRangePickerCancel>Cancel</button>
+            <button
+              mat-raised-button
+              color="primary"
+              matDateRangePickerApply
+              (mousedown)="filterByValue('date')"
+              (keyup.enter)="filterByValue('date')"
+            >
+              Apply
+            </button>
+          </mat-date-range-picker-actions>
+        </mat-date-range-picker>
+      </mat-form-field>
+      }@else if(filterValue === "status"){
+      <mat-select
+        [ngClass]="{ 'bg-white': !isDark, 'bg-black': isDark }"
+        class="py-2 pe-2 text-center border rounded-3 w-25 text-capitalize"
+        value="none"
+      >
+        <mat-option value="none" hidden>status</mat-option>
+        @for(filter of status;track filter){
+        <mat-option
+          value="{{ filter }}"
+          class="text-capitalize"
+          (mousedown)="filterByValue(filter)"
+          (keyup.enter)="filterByValue(filter)"
+          >{{ filter }}</mat-option
+        >
+        }
+      </mat-select>
+      }
+    </div>
+  </section>
+  <button
+    mat-flat-button
+    class="customButton"
+    (mousedown)="export()"
+    (keyup.enter)="export()"
+  >
+    <mat-icon>download</mat-icon>
+    <div>Export Data</div>
+  </button>
+</mat-toolbar>
+<section class="m-3">
+  <section style="overflow-x: auto">
+    @for(ride of rides;track ride._id;let i = $index){
+    <mat-card
+      class="mat-elevation-z3 d-flex flex-row card mb-3 border"
+      [ngStyle]="{
+        'background-color':
+          ride.status === 'cancelled'
+            ? 'rgb(129 15 15 / 94%)'
+            : 'rgb(24 219 48 / 36%)'
+      }"
+      (mousedown)="detail(ride)"
+      style="cursor: pointer"
+    >
+      <div class="d-flex align-items-center p-2">
+        <mat-card-title
+          [ngStyle]="{ color: isDark ? '#959595' : '#777777' }"
+          class="ms-3"
+          >{{ i + 1 }}</mat-card-title
+        >
+        <div class="vertical-divider mx-3 h-100"></div>
+      </div>
+      <div class="w-100 py-2 d-flex align-items-center">
+        <div style="width: 20%">
+          <mat-card-subtitle class=""
+            >Request Id :
+            <u
+              [ngClass]="{ 'fw-bold': !isDark }"
+              style="word-break: break-all"
+              >{{ ride.requestId }}</u
+            ></mat-card-subtitle
+          >
+          <mat-card-subtitle class=""
+            >uid :
+            <u [ngClass]="{ 'fw-bold': !isDark }">{{
+              ride.userUID
+            }}</u></mat-card-subtitle
+          >
+          <mat-card-subtitle class=""
+            >customer :
+            <u [ngClass]="{ 'fw-bold': !isDark }" class="text-capitalize">{{
+              ride.username
+            }}</u></mat-card-subtitle
+          >
+        </div>
+        <div class="vertical-divider mx-3 h-100"></div>
+        <div
+          style="width: 60%"
+          [ngStyle]="{ color: isDark ? '#959595' : '#777777' }"
+        >
+          <section class="d-flex text-center align-items-center my-2">
+            <img
+              src="assets/markers/source_marker.png"
+              alt="source"
+              height="40"
+            />
+            <div class="fs-5" style="width: 40%">
+              <span class="text-align text-center">
+                {{ ride.source }}
+              </span>
+            </div>
+            <div style="width: 20%">
+              <img src="assets/path.png" alt="path" height="60" />
+            </div>
+            <img
+              src="assets/markers/destination_marker.png"
+              alt="source"
+              height="40"
+            />
+            <div class="fs-5" style="width: 40%">
+              <span class="text-align text-center">
+                {{ ride.destination }}
+              </span>
+            </div>
+          </section>
+          <mat-divider
+            style="background-color: rgb(126, 110, 110)"
+          ></mat-divider>
+          <section class="row p-2">
+            <div class="col-4">
+              <span>{{ ride.dateTime | date : "dd/MM/yyyy, hh:mm a" }}</span
+              >&nbsp;
+              <span>{{ ride.dateTime | dateToTimeString }}</span>
+            </div>
+            <div class="col-4 text-center">
+              {{ ride.vehicle_type | uppercase }}
+            </div>
+            <div class="col-4 text-center">
+              {{ ride.stopNumber ? "stops : " + ride.stopNumber : "no stops" }}
+            </div>
+          </section>
+        </div>
+        <div class="vertical-divider mx-3 h-100"></div>
+        <div style="width: 20%; text-align: center">
+          <mat-card
+            class="m-2 p-2"
+            matTooltip="Status of driver"
+            matTooltipPosition="before"
+            matTooltipShowDelay="500"
+          >
+            <mat-card-title
+              class="rounded text-capitalize"
+              [ngClass]="{
+                'bg-success':
+                  ride.status === 'completed',
+                'bg-danger': ride.status === 'cancelled',
+              }"
+              >{{ ride.status }}</mat-card-title
+            >
+          </mat-card>
+
+          @if(ride.status !== "cancelled"){
+          <mat-card
+            class="m-2 p-2"
+            matTooltip="Assigned Driver name"
+            matTooltipPosition="before"
+            matTooltipShowDelay="500"
+          >
+            <mat-card-title class="rounded bg-success text-capitalize">{{
+              ride.driver.username!
+            }}</mat-card-title>
+          </mat-card>
+          }
+        </div>
+      </div>
+    </mat-card>
+    }@empty{
+    <div class="text-center fs-4 pt-3" style="height: 100px">
+      {{ noData }}
+    </div>
+    }
+  </section>
+</section>

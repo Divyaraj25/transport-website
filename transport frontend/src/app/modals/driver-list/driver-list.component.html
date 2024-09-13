@@ -1,0 +1,62 @@
+<section [ngStyle]="{ display: isLoading ? 'none' : 'block' }">
+  <section class="d-flex justify-content-between">
+    <div class="d-flex align-items-center">
+      <h1 mat-dialog-title class="m-0 p-0 ps-2 align-self-start">
+        {{ data.title }}
+      </h1>
+      <mat-icon
+        class="mt-2 ms-2"
+        matTooltip="All Drivers are approved by admin and has same service type, and all drivers are from same city"
+        matTooltipPosition="after"
+        >info</mat-icon
+      >
+    </div>
+    <button mat-dialog-close="no" mat-icon-button class="mt-2">
+      <mat-icon> close </mat-icon>
+    </button>
+  </section>
+  <mat-divider></mat-divider>
+  <mat-dialog-content>
+    <section class="row">
+      @for(driver of drivers;track driver._id;let i = $index){ @defer(){
+      <mat-card
+        class="col-4 align-items-start m-2 p-2 custom-card mat-elevation-z5"
+        (mousedown)="selected(driver)"
+        [ngClass]="{ selected: driver._id === selectedDriver?._id }"
+      >
+      <mat-card-title>{{ i + 1 }}</mat-card-title>
+        <img
+          src="http://localhost:5000/images/drivers/{{ driver.profile }}"
+          alt="image"
+          height="100"
+          style="align-self: center"
+        />
+        <mat-divider></mat-divider>
+        <mat-card-subtitle>{{ driver.username }}</mat-card-subtitle>
+        <mat-card-subtitle>{{ driver.email }}</mat-card-subtitle>
+        <mat-card-subtitle
+          >{{ driver.prefix }} {{ driver.phone_no }}</mat-card-subtitle
+        >
+        <mat-card-subtitle>{{ driver.city }}</mat-card-subtitle>
+        <mat-card-subtitle>{{ driver.country }}</mat-card-subtitle>
+      </mat-card>
+      }@loading(minimum 2s){
+      <div class="loader text-center"></div>
+      } }@empty{
+      <h1 class="text-center">No Drivers found</h1>
+      }
+    </section>
+  </mat-dialog-content>
+  <mat-divider></mat-divider>
+  <div class="">
+    <mat-dialog-actions class="d-flex justify-content-center">
+      <button
+        mat-raised-button
+        [mat-dialog-close]="selectedDriver?._id"
+        [disabled]="!selectedDriver?._id"
+      >
+        {{ data.action }}
+      </button>
+    </mat-dialog-actions>
+  </div>
+</section>

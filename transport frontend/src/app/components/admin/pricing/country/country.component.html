@@ -1,0 +1,64 @@
+<mat-toolbar class="sticky-top mat-elevation-z3" color="accent">
+    <input
+      type="text"
+      placeholder="Search"
+      class="form-control"
+      #search
+      style="width: 300px; height: 40px; align-self: center"
+    />
+    <button mat-icon-button (mousedown)="onSearch(search.value.toLowerCase())"><mat-icon>search</mat-icon></button>
+  <button
+    mat-raised-button
+    class="ml-auto align-self-center bg-success"
+    (click)="onAddCountry()"
+    style="margin-left: auto; margin-right: 10px"
+  >
+    Add Country
+  </button>
+</mat-toolbar>
+<section class="m-3">
+  <div class="row border border-2 py-3 rounded-3 fs-4 fw-medium text-center">
+    <div class="col-sm-1">Sr.no</div>
+    <div class="col-sm-1">Flag</div>
+    <div class="col-sm-10">
+      <div class="row text-center">
+        <div class="col-sm-3">Country Name</div>
+        <div class="col-sm-3">Currency</div>
+        <div class="col-sm-3">Call Code</div>
+        <div class="col-sm-3">Timezones</div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-2 border border-2 py-3 rounded-3 text-center">
+    <div class="col-sm-12">
+      <mat-divider></mat-divider>
+      @for(country of countries;track country._id;let i=$index){
+      <div class="row py-2 fs-5 align-items-center">
+        <div class="col-sm-1">{{ i + 1 }}</div>
+        <div class="col-sm-1">
+          <img
+            src="{{ country.flagImageUrl }}"
+            alt="{{ country.name }}"
+            style="height: 50px"
+          />
+        </div>
+        <div class="col-sm-10">
+          <div class="row text-center">
+            <div class="col-sm-3">{{ country.name | uppercase }}</div>
+            <div class="col-sm-3">{{ country.currency }}</div>
+            <div class="col-sm-3">{{ country.call_code }}</div>
+            <div class="col-sm-3">{{ country.timezone }}</div>
+          </div>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      }@empty{
+      <div class="row">
+        <div class="col-12">
+          <h1 class="text-center mt-5 fs-4 fw-medium">No countries added</h1>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</section>

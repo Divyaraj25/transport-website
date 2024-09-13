@@ -1,0 +1,74 @@
+<mat-container
+  style="width: 580px"
+  class="p-3"
+  [ngStyle]="{
+    opacity: isLoading ? 0.4 : 1,
+    'z-index': isLoading ? 2 : 0,
+    position: isLoading ? 'absolute' : 'inherit',
+    'pointer-events': isLoading ? 'none' : 'auto'
+  }"
+>
+  <section class="d-flex justify-content-between align-items-center">
+    <h1 mat-dialog-title>
+      {{ data.title }}
+    </h1>
+    <button mat-dialog-close="no" mat-icon-button>
+      <mat-icon> close </mat-icon>
+    </button>
+  </section>
+  <mat-divider></mat-divider>
+  <mat-dialog-content>
+    @if(cards.length > 0){
+    <div class="text-center">
+      @for(card of cards;track card.id){ @defer(){
+      <div
+        class="row justify-content-center align-items-center p-2 text-white"
+        style="width: 530px"
+        [ngClass]="{ 'default-card': card.default }"
+      >
+        <div class="col-1">
+          <span class="card-brand">{{ card.brand }}</span>
+        </div>
+        <div class="col-4 ms-3 fs-5">**** **** {{ card.last4 }}</div>
+        <div class="col-1 fs-5">{{ card.expNo }}</div>
+        <div class="col-4" style="margin-left: 20px">
+          <button
+            mat-flat-button
+            [disabled]="card.default"
+            (mousedown)="makeDefault(card)"
+          >
+            {{ card.default ? "Default" : "Set as default" }}
+          </button>
+        </div>
+        <div class="col-1 me-1">
+          <button mat-mini-fab color="warn" (mousedown)="deleteCard(card)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+      }@loading(minimum 2s){
+      <div class="row text-center justify-content-center">
+        <div class="loader col-12"></div>
+      </div>
+      } }
+    </div>
+    }@else{
+    <div class="row my-3">
+      <div class="col-12 text-center">No Cards Added</div>
+    </div>
+    }
+    <mat-divider></mat-divider>
+    <div class="my-3">
+      <form #add="ngForm">
+        <ngx-stripe-card
+          [options]="cardOptions"
+          [elementsOptions]="elementsOptions"
+        ></ngx-stripe-card>
+      </form>
+    </div>
+  </mat-dialog-content>
+  <mat-divider></mat-divider>
+  <mat-dialog-actions class="d-flex justify-content-end">
+    <button mat-raised-button (mousedown)="addCard()">{{ data.action }}</button>
+  </mat-dialog-actions>
+</mat-container>

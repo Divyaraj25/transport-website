@@ -1,0 +1,374 @@
+<section class="m-3">
+  <form
+    class="border rounded-2 px-3 mat-elevation-z3"
+    [formGroup]="pricingForm"
+  >
+    <div class="row align-items-center pt-3" style="z-index: 4">
+      <div class="col-md-3">
+        <mat-form-field class="w-100">
+          <mat-label>Select Country</mat-label>
+          <mat-select
+            id="country"
+            name="country"
+            formControlName="country"
+            [disabled]="this.formValidBool()"
+          >
+            @for(country of countries;track country._id){
+            <mat-option
+              value="{{ country.name }}"
+              (mousedown)="selectCountry(country)"
+              >{{ country.name }}</mat-option
+            >
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3">
+        <mat-form-field class="w-100">
+          <mat-label>Select City</mat-label>
+          <mat-select
+            id="city"
+            name="city"
+            formControlName="city"
+            [disabled]="this.formValidBool()"
+          >
+            @for(city of cities;track city._id){
+            <mat-option
+              value="{{ city.city }}"
+              (mousedown)="selectCity(city)"
+              >{{ city.city }}</mat-option
+            >
+            }
+          </mat-select>
+        </mat-form-field>
+        @if(cities.length === 0 ){
+        <div class="text-danger">No Cities added</div>
+        }
+      </div>
+      <div class="col-md-3">
+        <mat-form-field class="w-100">
+          <mat-label>Select Vehicle</mat-label>
+          <mat-select
+            id="vehicle"
+            name="vehicle"
+            formControlName="vehicle_type"
+            [disabled]="this.formValidBool()"
+          >
+            @for(vehicle of vehicles;track vehicle._id){
+            <mat-option
+              value="{{ vehicle.vehicle_type }}"
+              (mousedown)="selectVehicle(vehicle)"
+              >{{ vehicle.vehicle_type }}</mat-option
+            >
+            }
+          </mat-select>
+        </mat-form-field>
+        @if(vehicles.length === 0 ){
+        <div class="text-danger">Please add city</div>
+        }
+      </div>
+      <div class="col-md-3">
+        <button
+          (mousedown)="checkFormValid()"
+          mat-raised-button
+          class="w-100"
+          type="submit"
+          color="primary"
+        >
+          {{
+            addPricing
+              ? editMode
+                ? "Edit Clear"
+                : "Form Clear"
+              : "Validate for pricing"
+          }}
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="row p-3 style_1"
+      style="z-index: 3"
+      [ngClass]="formValidBool() ? 'after_if_style_1' : ''"
+    >
+      <div class="col-md-12">
+        <div class="row" *ngIf="formValidBool()">
+          <div class="col-md-3">
+            <mat-form-field class="w-100">
+              <mat-label>Driver Profit</mat-label>
+              <div class="d-flex">
+                <input
+                  matInput
+                  formControlName="driver_profit"
+                  (focus)="isdpinputfocus = true"
+                  (blur)="isdpinputfocus = false"
+                  mask="percent.2"
+                />
+                @if(isdpinputfocus || pricingForm.get('driver_profit')?.value){
+                <mat-prefix><strong>%</strong></mat-prefix>
+                }
+              </div>
+              <mat-icon
+                matSuffix
+                matTooltip="This is Tooltip"
+                matTooltipShowDelay="700"
+                matTooltipPosition="above"
+                >info</mat-icon
+              >
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="w-100">
+              <mat-label>Min. Fare</mat-label>
+              <div class="d-flex">
+                <input
+                  matInput
+                  formControlName="min_fare"
+                  mask="0*"
+                  (focus)="ismfinputfocus = true"
+                  (blur)="ismfinputfocus = false"
+                />
+                @if(ismfinputfocus || pricingForm.get('min_fare')?.value){
+                <mat-prefix><strong>{{currency}}</strong></mat-prefix>
+                }
+              </div>
+              <mat-icon
+                matSuffix
+                matTooltip="This is Tooltip"
+                matTooltipShowDelay="700"
+                matTooltipPosition="above"
+                >info</mat-icon
+              >
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="w-100">
+              <mat-label>Distance for base prize</mat-label>
+              <div class="d-flex">
+                <mat-select
+                  formControlName="distance_base_prize"
+                  (focus)="isdbpinputfocus = true"
+                  (blur)="isdbpinputfocus = false"
+                >
+                  <mat-option value="5">5</mat-option>
+                  <mat-option value="10">10</mat-option>
+                </mat-select>
+                @if(isdbpinputfocus ||
+                pricingForm.get('distance_base_prize')?.value){
+                <mat-prefix><strong>km</strong></mat-prefix>
+                }
+              </div>
+              <mat-icon
+                matSuffix
+                matTooltip="This is Tooltip"
+                matTooltipShowDelay="700"
+                matTooltipPosition="above"
+                >info</mat-icon
+              >
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="w-100">
+              <mat-label>Base prize</mat-label>
+              <div class="d-flex">
+                <input
+                  matInput
+                  formControlName="base_prize"
+                  (focus)="isbpinputfocus = true"
+                  (blur)="isbpinputfocus = false"
+                  mask="0*"
+                />
+                @if(isbpinputfocus || pricingForm.get('base_prize')?.value){
+                <mat-prefix
+                  ><strong>{{ currency }}</strong></mat-prefix
+                >
+                }
+              </div>
+              <mat-icon
+                matSuffix
+                matTooltip="This is Tooltip"
+                matTooltipShowDelay="700"
+                matTooltipPosition="above"
+                >info</mat-icon
+              >
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row align-items-center">
+          <div class="col-md-3">
+            <mat-form-field class="w-100">
+              <mat-label>Prize per Unit Distance</mat-label>
+              <div class="d-flex">
+                <input
+                  matInput
+                  formControlName="prize_per_distance"
+                  (focus)="isppdinputfocus = true"
+                  (blur)="isppdinputfocus = false"
+                  mask="0*"
+                />
+                @if(isppdinputfocus ||
+                pricingForm.get('prize_per_distance')?.value){
+                <mat-prefix
+                  ><strong>{{ currency }}</strong></mat-prefix
+                >
+                }
+              </div>
+              <mat-icon
+                matSuffix
+                matTooltip="This is Tooltip"
+                matTooltipShowDelay="700"
+                matTooltipPosition="above"
+                >info</mat-icon
+              >
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="w-100">
+              <mat-label>Prize per Unit Time(min)</mat-label>
+              <div class="d-flex">
+                <input
+                  matInput
+                  formControlName="prize_per_time"
+                  (focus)="ispptinputfocus = true"
+                  (blur)="ispptinputfocus = false"
+                  mask="0*"
+                />
+                @if(ispptinputfocus ||
+                pricingForm.get('prize_per_time')?.value){
+                <mat-prefix
+                  ><strong>{{ currency }}</strong></mat-prefix
+                >
+                }
+              </div>
+              <mat-icon
+                matSuffix
+                matTooltip="This is Tooltip"
+                matTooltipShowDelay="700"
+                matTooltipPosition="above"
+                >info</mat-icon
+              >
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-form-field class="w-100">
+              <mat-label>Max Space</mat-label>
+              <input matInput formControlName="max_space" mask="0*" />
+              <mat-icon
+                matSuffix
+                matTooltip="This is Tooltip"
+                matTooltipShowDelay="700"
+                matTooltipPosition="above"
+                >info</mat-icon
+              >
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <div class="row justify-content-center">
+              <div class="col-6">
+                <button
+                  mat-raised-button
+                  class="border rounded-5 fs-5 w-100 bg-success"
+                  [ngStyle]="{
+                    cursor: pricingForm.invalid ? 'not-allowed' : ''
+                  }"
+                  [disabled]="pricingForm.invalid"
+                  (mousedown)="formSubmit()"
+                >
+                  {{ editMode ? "Update" : "Save" }}
+                </button>
+              </div>
+              <div class="col-6">
+                <button
+                  (mousedown)="formClear()"
+                  mat-raised-button
+                  class="border rounded-5 fs-5 w-100"
+                  color="primary"
+                  [ngStyle]="{ cursor: !pricingClear ? 'not-allowed' : '' }"
+                  [disabled]="!pricingClear"
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <section class="mt-3 mat-elevation-z3 border rounded-3">
+    @if(pricingData.length > 0){
+    <div class="table-responsive">
+      <table class="table table-light">
+        <thead>
+          <tr class="w-100 text-center my-2">
+            <th>Sr. No</th>
+            <th>Vehicle Image</th>
+            <th>Vehicle Type</th>
+            <th>Country</th>
+            <th>City</th>
+            <th>Driver's Profit (%)</th>
+            <th>Min Fare</th>
+            <th>Distance for Base Prize (km)</th>
+            <th>Base Prize</th>
+            <th>Prize per Unit Distance</th>
+            <th>Prize per Unit Time</th>
+            <th>Max Space</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          @for(item of pricingData;track item._id;let i=$index){
+          <tr class="text-center">
+            <td class="py-3">{{ i + 1 }}</td>
+            <td class="py-3">
+              @if(item.vehicle_image){
+              <img
+                src="http://localhost:5000/images/vehicles/{{
+                  item.vehicle_image
+                }}"
+                alt="{{ item.vehicle_type }}"
+                height="50"
+              />
+              }@else{
+              <img
+                src="assets/cars/dummy_car.png"
+                alt="{{ item.vehicle_type }}"
+                height="50"
+                style="background-color: white"
+              />
+              }
+            </td>
+            <td class="py-3">{{ item.vehicle_type }}</td>
+            <td class="py-3">{{ item.country }}</td>
+            <td class="py-3">{{ item.city }}</td>
+            <td class="py-3">{{ item.driver_profit }}</td>
+            <td class="py-3">{{ item.min_fare }}</td>
+            <td class="py-3">{{ item.distance_base_prize }}</td>
+            <td class="py-3">{{ item.base_prize }}</td>
+            <td class="py-3">{{ item.prize_per_distance }}</td>
+            <td class="py-3">{{ item.prize_per_time }}</td>
+            <td class="py-3">{{ item.max_space }}</td>
+            <td
+              class="py-3"
+              matTooltip="edit pricing"
+              matTooltipPosition="above"
+              matTooltipShowDelay="700"
+            >
+              <button mat-icon-button (mousedown)="editPricing(item)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </tr>
+          }@empty{
+          <tr class="text-center">
+            <td class="py-3" colspan="12">No pricing data found</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    }@else{
+    <div class="text-center p-3 fs-3 m-3">No pricing data found</div>
+    }
+  </section>
+</section>

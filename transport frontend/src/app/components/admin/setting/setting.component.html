@@ -1,0 +1,215 @@
+<form class="m-3 p-3 border border-2 rounded-3" [formGroup]="settingForm">
+  <div class="row">
+    <div class="col-md-6">
+      <section class="d-flex align-items-center">
+        <label for="time" class="fs-5 m-3">Select Time (default 10 sec)</label>
+        <mat-icon
+          [fontSet]="'material-icons-outlined'"
+          matTooltip="Select time for the driver to accept the request"
+          matTooltipShowDelay="700"
+          matTooltipPosition="after"
+          >info</mat-icon
+        >
+      </section>
+      <mat-form-field class="example-full-width" style="width: 100%">
+        <mat-label>Time</mat-label>
+        <mat-select formControlName="timeControl" id="time">
+          <mat-option *ngFor="let time of timeOptions" value="{{ time }}">{{
+            time
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+      <section class="d-flex align-items-center">
+        <label for="stop" class="fs-5 m-3">Select Stops (default 1 stop)</label>
+        <mat-icon
+          [fontSet]="'material-icons-outlined'"
+          matTooltip="Select how many other destination points the user can take in between actual destination and source"
+          matTooltipShowDelay="700"
+          matTooltipPosition="after"
+          >info</mat-icon
+        >
+      </section>
+      <mat-form-field class="example-full-width" style="width: 100%">
+        <mat-label>Stop</mat-label>
+        <mat-select formControlName="stopControl" id="stop">
+          <mat-option *ngFor="let stop of stopOptions" value="{{ stop }}">{{
+            stop
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="border p-3 mb-3">
+    <div class="fs-3 text-decoration-underline m-3">
+      Stripe Information
+      <mat-icon
+        [fontSet]="'material-icons-outlined'"
+        matTooltip="Stripe information for payments"
+        matTooltipShowDelay="700"
+        matTooltipPosition="after"
+        >info</mat-icon
+      >
+    </div>
+    <div>
+      <section>
+        <label for="stripeAPIKey" class="fs-5 m-3">Stripe Publishable Key : </label>
+        <mat-form-field class="w-100">
+          <mat-label>publishable key</mat-label>
+          <input
+            type="text"
+            matInput
+            id="stripeAPIKey"
+            formControlName="stripeAPIKey"
+          />
+          <mat-error *ngIf="settingForm.get('stripeAPIKey')?.hasError('required')"
+            >Stripe API key is required</mat-error
+          >
+        </mat-form-field>
+      </section>
+    </div>
+    <mat-divider></mat-divider>
+    <div>
+      <section>
+        <label for="stripePrivateKey" class="fs-5 m-3">Stripe Private Key : </label>
+        <mat-form-field class="w-100">
+          <mat-label>Private Key</mat-label>
+          <input
+            type="password"
+            matInput
+            id="stripePrivateKey"
+            formControlName="stripePrivateKey"
+          />
+          <mat-error
+            *ngIf="settingForm.get('stripePrivateKey')?.hasError('required')"
+            >Stripe private key is required</mat-error
+          >
+        </mat-form-field>
+      </section>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="border p-3 mb-3">
+    <div class="fs-3 text-decoration-underline m-3">
+      Nodemailer Information
+      <mat-icon
+        [fontSet]="'material-icons-outlined'"
+        matTooltip="node mailer email and password for sending mail related to trip"
+        matTooltipShowDelay="700"
+        matTooltipPosition="after"
+        >info</mat-icon
+      >
+    </div>
+    <div>
+      <section>
+        <label for="nodeMailerEmail" class="fs-5 m-3">Email : </label>
+        <mat-form-field class="w-100">
+          <mat-label>Email address</mat-label>
+          <input
+            type="text"
+            matInput
+            id="nodeMailerEmail"
+            formControlName="nodeMailerEmail"
+          />
+          <mat-error *ngIf="settingForm.get('nodeMailerEmail')?.hasError('required')"
+            >email is required field</mat-error
+          >
+        </mat-form-field>
+      </section>
+    </div>
+    <mat-divider></mat-divider>
+    <div>
+      <section>
+        <label for="nodeMailerPassword" class="fs-5 m-3">Password : </label>
+        <mat-form-field class="w-100">
+          <mat-label>password</mat-label>
+          <input
+            type="password"
+            matInput
+            id="nodeMailerPassword"
+            formControlName="nodeMailerPassword"
+          />
+          <mat-error
+            *ngIf="settingForm.get('nodeMailerPassword')?.hasError('required')"
+            >password is required field</mat-error
+          >
+        </mat-form-field>
+      </section>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="border p-3 mb-3">
+    <div class="fs-3 text-decoration-underline m-3">
+      Twilio Information
+      <mat-icon
+        [fontSet]="'material-icons-outlined'"
+        matTooltip="Twilio information for sending sms related to trip"
+        matTooltipShowDelay="700"
+        matTooltipPosition="after"
+        >info</mat-icon
+      >
+    </div>
+    <div>
+      <section>
+        <label for="twilioAccountSid" class="fs-5 m-3">Account SID : </label>
+        <mat-form-field class="w-100">
+          <mat-label>account sid</mat-label>
+          <input
+            type="text"
+            matInput
+            id="twilioAccountSid"
+            formControlName="twilioAccountSid"
+          />
+          <mat-error *ngIf="settingForm.get('twilioAccountSid')?.hasError('required')"
+            >account sid is required</mat-error
+          >
+        </mat-form-field>
+      </section>
+    </div>
+    <div>
+      <section>
+        <label for="twilioAuthToken" class="fs-5 m-3">Auth Token : </label>
+        <mat-form-field class="w-100">
+          <mat-label>auth token</mat-label>
+          <input
+            type="password"
+            matInput
+            id="twilioAuthToken"
+            formControlName="twilioAuthToken"
+          />
+          <mat-error *ngIf="settingForm.get('twilioAuthToken')?.hasError('required')"
+            >auth token is required</mat-error
+          >
+        </mat-form-field>
+      </section>
+    </div>
+    <mat-divider></mat-divider>
+    <div>
+      <section>
+        <label for="twilioPhoneNo" class="fs-5 m-3">Contact : </label>
+        <mat-form-field class="w-100">
+          <mat-label>Contact Number</mat-label>
+          <input
+            type="text"
+            matInput
+            id="twilioPhoneNo"
+            formControlName="twilioPhoneNo"
+          />
+          <mat-error
+            *ngIf="settingForm.get('twilioPhoneNo')?.hasError('required')"
+            >twilio phone number is required</mat-error
+          >
+        </mat-form-field>
+      </section>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 text-end">
+      <button mat-raised-button color="primary" (mousedown)="saveSetting()" [disabled]="!settingForm.touched">
+        Save
+      </button>
+    </div>
+  </div>
+</form>

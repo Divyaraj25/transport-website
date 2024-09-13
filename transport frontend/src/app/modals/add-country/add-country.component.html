@@ -1,0 +1,54 @@
+<section
+  class="m-3"
+  [ngStyle]="{
+    opacity: isLoading ? 0.4 : 1,
+    'z-index': isLoading ? 2 : 0,
+    position: isLoading ? 'absolute' : 'inherit',
+    width: isLoading ? '100vw' : 'inherit',
+    'pointer-events': isLoading ? 'none' : 'auto'
+  }"
+>
+  <mat-divider></mat-divider>
+  <h2 mat-dialog-title class="text-center mt-3">Add Country</h2>
+  <mat-divider class="m-0 p-0"></mat-divider>
+  <mat-dialog-content>
+    <p>Pick a country</p>
+    <form #myForm="ngForm" [formGroup]="countryFound">
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field>
+            <mat-label>Search Country</mat-label>
+            <input
+              matInput
+              name="country"
+              formControlName="countryName"
+              autocomplete="off"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      @if(countrySelected){
+      <div class="row">
+        <div class="col-6">
+          <mat-form-field>
+            <mat-label>Country Currency</mat-label>
+            <input matInput name="currency" formControlName="countryCurrency" />
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field>
+            <mat-label>Country Calling Code</mat-label>
+            <input matInput name="callCode" formControlName="countryCallCode" />
+          </mat-form-field>
+        </div>
+      </div>
+      }
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()" [mat-dialog-close]="'cancel'">No Thanks</button>
+    <button mat-button [disabled]="!countrySelected" (click)="onSubmit()">
+      Add Country
+    </button>
+  </mat-dialog-actions>
+</section>

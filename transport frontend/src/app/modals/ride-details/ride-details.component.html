@@ -1,0 +1,311 @@
+<section class="d-flex justify-content-between align-items-center">
+  <div>
+    <h1 mat-dialog-title class="m-0">
+      {{ data.title }}
+    </h1>
+    <h4 class="custom me-0 mt-0 text-light">
+      <u> requestId : {{ data.subtitle }} </u>
+    </h4>
+  </div>
+  <button mat-dialog-close="no" mat-icon-button class="mt-2 me-3">
+    <mat-icon> close </mat-icon>
+  </button>
+</section>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+  <div class="row">
+    <div class="col-lg-6 border-end">
+      <div matCardTitle class="m-2">User details</div>
+      <mat-divider></mat-divider>
+      <mat-card class="mb-2 d-flex flex-row p-1 mat-elevation-z8">
+        <img
+          src="http://localhost:5000/images/users/{{ ride.profile }}"
+          alt="image"
+          height="120"
+          class="align-self-center"
+        />
+        <div class="d-flex flex-column ms-3 justify-content-start">
+          <mat-card-subtitle>uid : {{ ride.userUID }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ ride.username }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ ride.email }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ ride.phone_no }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ ride.country }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ ride.city }}</mat-card-subtitle>
+        </div>
+      </mat-card>
+      @if(data.from === 'history' && ride.driverId){
+      <div matCardTitle class="m-2">Driver details</div>
+      <mat-divider></mat-divider>
+      <mat-card class="mb-2 d-flex flex-row p-1 mat-elevation-z8">
+        <img
+          src="http://localhost:5000/images/drivers/{{ ride.driver.profile }}"
+          alt="image"
+          height="120"
+          class="align-self-center"
+        />
+        <div class="d-flex flex-column ms-3 justify-content-start">
+          <mat-card-subtitle>uid : {{ ride.driver.uid }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ ride.driver.username }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ ride.driver.email }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ ride.driver.phone_no }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ ride.driver.country }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ ride.driver.city }}</mat-card-subtitle>
+        </div>
+      </mat-card>
+      }
+      <div class="mb-2">
+        <div matCardTitle class="m-2 d-flex align-items-center">
+          Payment Method :
+          <span class="ms-3" matCardSubtitle>{{
+            '"' + ride.payment_method + '"'
+          }}</span>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <div matCardTitle class="m-2">Vehicle details</div>
+      <mat-divider></mat-divider>
+      <mat-card class="mb-2 d-flex flex-row p-1 mat-elevation-z8">
+        <img
+          src="http://localhost:5000/images/vehicles/{{ ride.vehicle_image }}"
+          alt="image"
+          height="120"
+          class="align-self-center"
+        />
+        <div class="d-flex flex-column ms-3" style="width: 100%">
+          <mat-card-subtitle
+            >Vehicle Type : {{ ride.vehicle_type }}</mat-card-subtitle
+          >
+          <mat-divider></mat-divider>
+          @if(ride.min_fare === ride.total_fare){
+          <mat-card-subtitle
+            >minimum fare :<span class="align-right">
+              {{ currency }} {{ ride.min_fare.toFixed(2) }}</span
+            ></mat-card-subtitle
+          >
+          <mat-divider></mat-divider>
+          <mat-card-subtitle>
+            total fare :
+            <span class="align-right"
+              >{{ currency }} {{ ride.total_fare.toFixed(2) }}</span
+            ></mat-card-subtitle
+          >
+          }@else{
+          <mat-card-subtitle
+            >Base prize :
+            <span class="align-right">
+              {{ currency }} {{ ride.base_prize.toFixed(2) }}</span
+            ></mat-card-subtitle
+          >
+          <mat-card-subtitle
+            >Prize per distance :
+            <span class="align-right">
+              {{ currency }} {{ ride.prize_per_distance.toFixed(2) }}</span
+            ></mat-card-subtitle
+          >
+          <mat-card-subtitle
+            >Prize per time :
+            <span class="align-right">
+              {{ currency }} {{ ride.prize_per_time.toFixed(2) }}</span
+            ></mat-card-subtitle
+          >
+          <mat-divider></mat-divider>
+          <mat-card-subtitle>
+            total fare :
+            <span class="align-right">
+              {{ currency }} {{ ride.total_fare.toFixed(2) }}</span
+            ></mat-card-subtitle
+          >
+          }
+        </div>
+      </mat-card>
+    </div>
+    <div
+      class="col-lg-6 d-flex flex-column justify-content-between"
+      style="height: auto"
+    >
+      <div>
+        <div class="mb-2">
+          <div matCardTitle class="m-2 d-flex align-items-center">
+            Scheduled Date and Time :
+            <span class="ms-3" matCardTitle
+              >{{ ride.dateTime | date : "short" }},
+              {{ ride.dateTime | dateToTimeString }}</span
+            >
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        <section class="d-flex text-center align-items-center my-2">
+          <div
+            class="d-flex align-items-center"
+            style="width: 40%"
+            matTooltip="This is Source"
+            matTooltipShowDelay="600"
+            [matTooltipPositionAtOrigin]="true"
+          >
+            <img
+              src="assets/markers/source_marker.png"
+              alt="source image"
+              height="40"
+            />
+            <div class="fs-5">
+              <span matCardSubtitle class="text-align text-center">
+                {{ ride.source }}
+              </span>
+            </div>
+          </div>
+          <div style="width: 20%">
+            <img src="assets/path.png" alt="path image" height="60" />
+          </div>
+          <div
+            class="d-flex align-items-center"
+            style="width: 40%"
+            matTooltip="This is Destination"
+            matTooltipShowDelay="600"
+            [matTooltipPositionAtOrigin]="true"
+          >
+            <img
+              src="assets/markers/destination_marker.png"
+              alt="source image"
+              height="40"
+            />
+            <div class="fs-5">
+              <span matCardSubtitle class="text-align text-center">
+                {{ ride.destination }}
+              </span>
+            </div>
+          </div>
+        </section>
+        <mat-divider></mat-divider>
+        @if(ride.stops.length > 0){
+        <mat-divider></mat-divider>
+        <div matCardTitle>
+          <img
+            src="assets/markers/stop_marker.png"
+            alt="source image"
+            height="40"
+          />
+          Stops in between source and destination
+        </div>
+        <mat-divider></mat-divider>
+        @for(stop of ride.stops;track stop;let i = $index){
+        <div class="d-flex ms-3">
+          <span class="ms-2 border-end pe-3">{{ i + 1 }}</span>
+          <section class="ms-3">
+            {{ stop }}
+          </section>
+        </div>
+        <mat-divider></mat-divider>
+        } }
+      </div>
+
+      <div>
+        <div class="row align-items-center justify-content-center my-2">
+          <mat-card
+            class="col mx-2"
+            style="background-color: rgb(174, 160, 160)"
+          >
+            <div matCardTitle class="text-center text-dark">
+              {{ ride.time }}
+            </div>
+            <div matCardSubtitle class="text-center text-dark">time</div>
+          </mat-card>
+          <mat-card
+            class="col mx-2"
+            style="background-color: rgb(174, 160, 160)"
+          >
+            <div matCardTitle class="text-center text-dark">
+              {{ ride.distance }}
+            </div>
+            <div matCardSubtitle class="text-center text-dark">distance</div>
+          </mat-card>
+        </div>
+        <mat-divider></mat-divider>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="row m-2">
+    <div class="col-12 border border-2">
+      <div id="map" style="height: 400px"></div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+@if(data.action1){ @if(data.from === 'confirm'){
+<mat-dialog-actions class="d-flex justify-content-center">
+  <button
+    mat-raised-button
+    class="bg-primary"
+    (mousedown)="anyDriver()"
+    (keyup.enter)="anyDriver()"
+  >
+    {{ data.action1 }}
+  </button>
+
+  <button
+    mat-raised-button
+    class="bg-success"
+    (mousedown)="selectedDriver()"
+    (keyup.enter)="selectedDriver()"
+  >
+    {{ data.action2 }}
+  </button>
+</mat-dialog-actions>
+}@else if(data.from === 'running-request'){
+<mat-dialog-actions class="d-flex justify-content-center">
+  <button mat-raised-button class="bg-success">
+    {{ data.action1 }}
+  </button>
+
+  <button mat-raised-button class="bg-danger">
+    {{ data.action2 }}
+  </button>
+</mat-dialog-actions>
+} }@else{ @if(data.from === 'confirm'){ @if(ride.driverUsername ||
+ride.driver[0]._id!){
+<div class="d-flex justify-content-center m-2">
+  <mat-card class="w-25 text-center p-3 bg-success">
+    <mat-card-title>Driver Assigned</mat-card-title>
+    <mat-card-title>{{
+      ride.driverUsername! || ride.driver[0].username!
+    }}</mat-card-title>
+  </mat-card>
+</div>
+}@else{ @if(ride.driver[0]._id === "0"){
+<div class="d-flex justify-content-center m-2">
+  <mat-card class="w-25 text-center p-3 bg-success">
+    <mat-card-title>{{ ride.driverUsername || "On Hold" }}</mat-card-title>
+  </mat-card>
+</div>
+}@else{
+<div class="d-flex justify-content-center m-2">
+  <mat-card class="w-25 text-center p-3 bg-success">
+    <mat-card-title>All Drivers Rejected</mat-card-title>
+  </mat-card>
+</div>
+} } }@else if(data.from === 'history'){
+<div class="d-flex justify-content-center m-2">
+  <mat-card
+    class="w-25 text-center p-3"
+    [ngStyle]="{
+      'background-color':
+        ride.status === 'cancelled'
+          ? 'rgb(187 28 28 / 66%)'
+          : 'rgb(24 219 48 / 36%)'
+    }"
+  >
+    <mat-card-title class="text-capitalize"
+      >{{ ride.status }} By</mat-card-title
+    >
+    @if(ride.driverId){
+    <mat-card-title class="text-capitalize">Driver : {{
+      ride.driver.username
+    }}</mat-card-title>
+    <mat-divider></mat-divider>
+    <div matCardSubtitle>Payment Status : Paid</div>
+    }@else{
+    <mat-card-title>Admin</mat-card-title>
+    }
+  </mat-card>
+</div>
+} }

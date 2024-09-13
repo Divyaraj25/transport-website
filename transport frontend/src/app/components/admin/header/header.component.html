@@ -1,0 +1,85 @@
+<section
+  [ngStyle]="{
+    opacity: isLoading ? 0.4 : 1,
+    'z-index': isLoading ? 1 : 0,
+    position: isLoading ? 'absolute' : 'inherit',
+    width: isLoading ? '100vw' : 'inherit',
+    'pointer-events': isLoading ? 'none' : 'auto'
+  }"
+  [ngClass]="{ 'light-theme': !isDark, 'dark-theme': isDark }"
+>
+  <mat-toolbar class="sticky-top mat-elevation-z3 w-100" color="primary">
+    <button
+      mat-icon-button
+      class="example-icon"
+      (mousedown)="collapsed.set(!collapsed())"
+      aria-label="Example icon-button with menu icon"
+      #sidenavToggle
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span routerLink="/admin" style="cursor: pointer">Admin Panel</span>
+    @if(current.length > 0){
+      <div class="vertical-divider mx-3"></div>
+    }
+    <span class="text-capitalize">{{current}}</span>
+    <section class="logout-section">
+      <mat-slide-toggle (toggleChange)="onToggleChange()" [(ngModel)]="isDark"></mat-slide-toggle>
+      <mat-icon
+        class="mx-3 mat-badge-accent"
+        [matBadge]="batchValue"
+        matBadgeOverlap="false"
+        matBadgeOverlap="true"
+        matBadgeSize="small"
+        >notifications</mat-icon
+      >
+      <button mat-icon-button style="cursor: pointer" matTooltip="Logout" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </section>
+  </mat-toolbar>
+  <mat-sidenav-container>
+    <mat-sidenav
+      opened
+      mode="side"
+      [style.width]="computedSidenav()"
+      class="mat-elevation-z5"
+    >
+      <mat-nav-list>
+        <ng-container *ngFor="let item of menuItems()">
+          <a
+            mat-list-item
+            routerLink="/{{ item.link }}"
+            routerLinkActive="selected-menu-item"
+            #rla="routerLinkActive"
+            [activated]="rla.isActive"
+            routerLinkActiveOption="{exact: true}"
+            ariaCurrentWhenActive="page"
+          >
+            <mat-icon
+              [style.fontSize]="'20px'"
+              [fontSet]="
+                rla.isActive ? 'material-icons' : 'material-icons-outlined'
+              "
+              matListItemIcon
+              >{{ item.icon }}</mat-icon
+            >
+            <span matListItemTitle [style.fontSize]="'15px'">{{
+              item.title
+            }}</span>
+          </a>
+          <mat-divider *ngIf="item.section"></mat-divider>
+        </ng-container>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content
+      class="content"
+      [style.margin-left]="computedSidenav()"
+    >
+      <router-outlet> </router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</section>
+@if(isLoading){
+<app-buffer></app-buffer>
+}
