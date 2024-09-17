@@ -57,7 +57,3 @@ jobs:
     - name: Install dependencies
       run: npm install --force
       working-directory: ./transport frontend
-
-    - name: Build frontend
-      run: npm run build
-      working-directory: ./transport frontend
