@@ -30,6 +30,7 @@
     "angular2-datetimepicker": "^1.1.1",
     "bn-ng-idle": "^2.0.5",
     "bootstrap": "^5.3.3",
+    "express": "^4.21.0",
     "http-server": "^14.1.1",
     "ngx-mask": "^17.0.8",
     "ngx-stripe": "^17.2.0",
