@@ -37,8 +37,6 @@ $dark-theme: mat.define-dark-theme(
       accent: $accent,
       warn: $warn,
     ),
-    mat.$theme-ignore-duplication-warnings: true,
-    typography: mat.define-typography-config(),
   )
 );
 
