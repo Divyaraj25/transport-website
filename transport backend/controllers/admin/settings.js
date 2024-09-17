@@ -55,18 +55,18 @@ module.exports = {
       fs.writeFile(
         path.join(__dirname, "../../.env"),
         `
-        DB_URL = 'mongodb://localhost:27017/final_project'
-        HOST='smtp-relay.brevo.com'
-        ATLAS_DB_URL = 'mongodb+srv://divyaraj25:D2505.03m@cluster0.ah5czyx.mongodb.net/transport_project?retryWrites=true&w=majority&appName=Cluster0'
-        STRIPE_PUBLISHABLE_KEY='${stripeApiKey}'
-        STRIPE_SECRET_KEY='${stripePrivateKey}'
-        STRIPE_WEBHOOK_SECRET_KEY = 'whsec_307cb57929cc4fd0474cfdf21d740b0c50215300e9738bd9472885a825ee9bab'
-        JWTSECRET = 'nosecretinadmin'
-        NODE_MAILER_EMAIL='${nodeMailerEmail}'
-        NODE_MAILER_PASSWORD='${nodeMailerPassword}'
-        TWILIO_ACCOUNT_SID='${twilioAccountSid}'
-        TWILIO_AUTH_TOKEN='${twilioAuthToken}'
-        TWILIO_PHONE_NO='${twilioPhoneNo}'
+        DB_URL = mongodb://localhost:27017/final_project
+        HOST = smtp-relay.brevo.com
+        ATLAS_DB_URL = mongodb+srv://divyaraj25:D2505.03m@cluster0.ah5czyx.mongodb.net/transport_project?retryWrites=true&w=majority&appName=Cluster0
+        STRIPE_PUBLISHABLE_KEY = ${stripeApiKey}
+        STRIPE_SECRET_KEY = ${stripePrivateKey}
+        STRIPE_WEBHOOK_SECRET_KEY = whsec_307cb57929cc4fd0474cfdf21d740b0c50215300e9738bd9472885a825ee9bab
+        JWTSECRET = nosecretinadmin
+        NODE_MAILER_EMAIL = ${nodeMailerEmail}
+        NODE_MAILER_PASSWORD = ${nodeMailerPassword}
+        TWILIO_ACCOUNT_SID = ${twilioAccountSid}
+        TWILIO_AUTH_TOKEN = ${twilioAuthToken}
+        TWILIO_PHONE_NO = ${twilioPhoneNo}
         `,
         function (err) {
           if (err) {
