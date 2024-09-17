@@ -1,0 +1,56 @@
+name: transport-website CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build-backend:
+
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: ./transport backend/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+      working-directory: ./transport backend
+    
+    - name: Set up environment variables
+      run: |
+        touch .env
+        echo "${{ secrets.BACKEND_ENV }}" > .env
+      working-directory: ./transport backend
+        
+  build-frontend:
+
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: ./transport frontend/package-lock.json
+
+    - name: Install dependencies
+      run: npm install --force
+      working-directory: ./transport frontend
