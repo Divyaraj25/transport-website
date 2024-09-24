@@ -135,7 +135,7 @@ export class DriverListComponent implements OnInit{
     this.editMode = true
 
     this.imageName = user.profile!
-    this.previewImage = `http://localhost:5000/images/drivers/${user.profile}`
+    this.previewImage = `http://16.170.146.16:5000/images/drivers/${user.profile}`
 
     this.changingImage()
 

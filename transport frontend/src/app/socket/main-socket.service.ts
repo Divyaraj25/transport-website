@@ -8,7 +8,7 @@ import { Ride } from '../interfaces/ride.interface';
 })
 export class MainSocketService {
   runningRequests:Subject<Ride[]> = new Subject<Ride[]>()
-  socket = io('ws://localhost:5000', {}); 
+  socket = io('ws://16.170.146.16:5000', {}); 
 
   constructor() { }
 

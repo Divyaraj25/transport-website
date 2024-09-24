@@ -126,7 +126,7 @@ export class VehicleTypeComponent implements OnInit{
     this.imageName = vehicle.vehicle_image
     if (vehicle.vehicle_image && this.editMode) {
       this.formData.append('old_image', vehicle.vehicle_image)
-      this.previewImage = 'http://localhost:5000/images/vehicles/' + vehicle.vehicle_image
+      this.previewImage = 'http://16.170.146.16:5000/images/vehicles/' + vehicle.vehicle_image
       this.changingImage()
     }
   }

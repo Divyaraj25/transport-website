@@ -21,7 +21,7 @@ export class LoginService {
 
   login(email: string, password: string) {
     this.http.post(
-      'http://localhost:5000/login',
+      'http://16.170.146.16:5000/login',
       { email, password },
       { withCredentials: true, observe: 'events' }
     )
@@ -51,7 +51,7 @@ export class LoginService {
     try {
       let token: string | null = localStorage.getItem('klenTUkn')
       if (token) {
-        this.http.post('http://localhost:5000/logout', { email: this.decode(localStorage.getItem('UTlenAma')!), token }, { withCredentials: true, observe: 'events' }).subscribe({
+        this.http.post('http://16.170.146.16:5000/logout', { email: this.decode(localStorage.getItem('UTlenAma')!), token }, { withCredentials: true, observe: 'events' }).subscribe({
 
           next: (data: any) => {
             this.commonService.toast(data.body.message, 'success')

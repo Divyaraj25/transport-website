@@ -117,7 +117,7 @@ export class UsersComponent implements OnInit {
     this.editMode = true
 
     this.imageName = user.profile
-    this.previewImage = `http://localhost:5000/images/users/${user.profile}`
+    this.previewImage = `http://16.170.146.16:5000/images/users/${user.profile}`
 
     this.changingImage()
     if (this.formData.has('_id')) {

@@ -43,7 +43,7 @@ const server = http.createServer(app);
  * connect with socket at port 5000
  */
 
-const io = socketio(server, { cors: { origin: "http://localhost:4200" } });
+const io = socketio(server, { cors: { origin: "*" } });
 app.set("io", io);
 global.io = io;
 

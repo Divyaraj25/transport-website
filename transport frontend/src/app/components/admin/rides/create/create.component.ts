@@ -231,7 +231,7 @@ export class CreateComponent implements OnInit {
                 this.clearAll()
                 this.commonService.toast("User found", "success")
                 this.user = data.body.data.users[0]
-                this.previewImage = `http://localhost:5000/images/users/${this.user?.profile}`
+                this.previewImage = `http://16.170.146.16:5000/images/users/${this.user?.profile}`
                 this.userFound = true
                 this.firstTimeLoad = true
                 this.getCardsWithCustomerDetails()
